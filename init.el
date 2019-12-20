@@ -1,5 +1,5 @@
 (setq inhibit-splash-screen t)
-(setq initial-scratch-message "")
+;(setq initial-scratch-message "")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -40,16 +40,29 @@
 
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup/")))
 
+; Packages
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
+(package-refresh-contents)
 
-(unless package-archive-contents
-  (package-refresh-contents))
+(setq packages '(ivy-bibtex))
+(print packages)
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+(dolist (package packages)
+  (unless (package-installed-p package)
+    (package-install package)))
 
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode 1))
+(require 'ivy)
+(ivy-mode 1)
+
+(require 'ido)
+(ido-mode t)
+
+;; (require 'org-ref)
+(setq bibliography-path "~/Mind/bibliography/")
+;; (setq org-ref-bibliography-notes (concat bibliography-path "notes.org")
+;;       org-ref-default-bibliography (list (concat bibliography-path "references.bib"))
+;;       org-ref-pdf-directory (concat bibliography-path "files/"))
+
+(setq bibtex-completion-bibliography (list (concat bibliography-path "references.bib")))
